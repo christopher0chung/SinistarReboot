@@ -54,9 +54,9 @@ namespace BasicExample
         {
             if (scene.buildIndex != 0)
             {
-                if (GameObject.Find("ShipMove") != null)
+                if (GameObject.Find("Ship") != null)
                 {
-                    myIO = GameObject.Find("ShipMove").GetComponent<IControllable>();
+                    myIO = GameObject.Find("Ship").GetComponent<IControllable>();
                     GetComponent<MeshRenderer>().enabled = false;
                 }
             }

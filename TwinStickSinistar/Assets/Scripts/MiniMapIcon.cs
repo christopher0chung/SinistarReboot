@@ -17,6 +17,10 @@ public class MiniMapIcon : MonoBehaviour {
         {
             transform.localPosition = new Vector3(whatITrack.position.x / 100, whatITrack.position.z / 100, 0);
         }
+        else
+        {
+            Destroy(this.gameObject);
+        }
 
 	
 	}
