@@ -27,7 +27,7 @@ public class MinerAction : MonoBehaviour, IMappable {
     {
         myRB = GetComponent<Rigidbody>();
         gameObject.tag = "Mob";
-        InvokeRepeating("FireAtAsteroid", 5, 1.2f);
+        InvokeRepeating("FireAtAsteroid", Random.Range(4.0f, 10f), 1.2f);
         SpawnIcon();
     }
 

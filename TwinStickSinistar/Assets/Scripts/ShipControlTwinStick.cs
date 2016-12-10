@@ -93,9 +93,11 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
             {
                 countText.text = "Crystal Count: " + value;
                 count = value;
+                Collect.Play();
             }
         }
     }
+    private AudioSource Collect;
 
     private ParticleSystem [] myPS = new ParticleSystem [3];
     private bool thrusterOn = true;
@@ -152,6 +154,7 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
         THRUSTERON = false;
         speedInd = transform.Find("Move Arrows");
         shootInd = transform.Find("ShipShoot").Find("ShootArrows").GetComponent<SpriteRenderer>();
+        Collect = GetComponent<AudioSource>();
 	}
 
     void Update()

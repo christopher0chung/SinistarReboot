@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SinistarCounter : MonoBehaviour {
 
+    private AudioSource Collect;
     private int _counter;
     public int counter
     {
@@ -18,8 +19,14 @@ public class SinistarCounter : MonoBehaviour {
             {
                 counterText.text = "Sinistar has collected: " + value.ToString();
                 _counter = value;
+                Collect.Play();
             }
         }
     }
     public Text counterText;
+
+    void Start()
+    {
+        Collect = GetComponent<AudioSource>();
+    }
 }
