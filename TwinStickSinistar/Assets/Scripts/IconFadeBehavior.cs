@@ -6,6 +6,8 @@ public class IconFadeBehavior : MonoBehaviour {
     public Transform playerIcon;
     private SpriteRenderer mySR;
 
+    private Color myColor;
+
     public float fullColorRange;
     public float minColorRange;
 
@@ -13,6 +15,7 @@ public class IconFadeBehavior : MonoBehaviour {
     {
         playerIcon = transform.parent.parent.transform.Find("PlayerMM").transform;
         mySR = GetComponent<SpriteRenderer>();
+        myColor = mySR.color;
     }
 
 	// Update is called once per frame
@@ -23,11 +26,11 @@ public class IconFadeBehavior : MonoBehaviour {
             float distToPlayer = Vector3.Distance(playerIcon.position, transform.position);
             if (distToPlayer <= fullColorRange)
             {
-                mySR.color = Color.white;
+                mySR.color = myColor;
             }
             else
             {
-                mySR.color = new Color(1, 1, 1, fullColorRange * (1 - (distToPlayer / (minColorRange - fullColorRange))));
+                mySR.color = new Color(myColor.r, myColor.g, myColor.b, fullColorRange * (1 - (distToPlayer / (minColorRange - fullColorRange))));
             }
         }
 	

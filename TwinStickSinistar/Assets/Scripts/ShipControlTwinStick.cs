@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 public class ShipControlTwinStick : MonoBehaviour, IControllable {
 
+    private Rigidbody myRB;
+
     private float moveAng;
     private float shootAng;
 
     public float turnRate;
     public float speedBase;
-    public float speedBonus;
-    private float speedBonusApplied;
 
     public float heatPerBullet;
 
@@ -136,6 +136,7 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
 
 	// Use this for initialization
 	void Start () {
+        myRB = GetComponent<Rigidbody>();
         thrusterLight = transform.Find("Thruster").Find("ThrusterLight").GetComponent<Light>();
         myPosition = transform;
         myGuns = transform.Find("ShipShoot");
@@ -194,10 +195,11 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
 	
     void FixedUpdate()
     {
+        myRB.velocity = Vector3.zero;
         momentumApplied = Vector3.Lerp(momentumApplied, momentumContributed, .03f);
         speedInd.localScale = new Vector3((Vector3.Magnitude(momentumApplied) / 5) * 2 + 1, 1, 1);
         myLPB.LookPtVal(momentumApplied * 20);
-        myPosition.position += momentumApplied;
+        myRB.MovePosition(myPosition.position + momentumApplied);
     }
 
     public void LeftStick(float upDown, float leftRight)
@@ -206,7 +208,7 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
         {
             lastMoveAng = Mathf.Atan2(-upDown, leftRight) * Mathf.Rad2Deg;
             myPosition.rotation = Quaternion.Euler(0, lastMoveAng, 0);
-            momentumContributed = new Vector3(leftRight, 0, upDown) * (speedBase + speedBonusApplied);
+            momentumContributed = new Vector3(leftRight, 0, upDown) * (speedBase);
             THRUSTERON = true;
         }
         else
@@ -238,8 +240,8 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
 
     private void Fire()
     {
-        GameObject myBullet = (GameObject)Instantiate(bullet, myGuns.position + myGuns.right * 3, myGuns.rotation);
-        myBullet.GetComponent<bulletBehavior>().InheritMomentum(momentumApplied);
+        GameObject myBullet = (GameObject)Instantiate(bullet, myGuns.position + myGuns.right * 7, myGuns.rotation);
+        myBullet.GetComponent<BulletBehavior>().InheritMomentum(momentumApplied);
         heat += heatPerBullet;
     }
 }

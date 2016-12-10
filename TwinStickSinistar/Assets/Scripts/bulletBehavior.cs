@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class bulletBehavior : MonoBehaviour {
+public class BulletBehavior : MonoBehaviour {
 
     public float bulletSpeed;
     public Vector3 inheritedMomentum;
@@ -27,15 +27,17 @@ public class bulletBehavior : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.transform.root.gameObject.name != "Ship")
-        {
         Instantiate(explosion, transform.position, Quaternion.identity);
-        if (other.gameObject.name == "Asteroid(Clone)")
+        if (other.gameObject.tag == "Asteroid")
         {
             other.GetComponent<AsteroidScript>().MakeACrystal(transform.position);
             other.GetComponent<Rigidbody>().AddExplosionForce(explosionForce, transform.position, explosionRadius);
         }
-        Destroy(this.gameObject);
+        if (other.gameObject.tag == "Mob")
+        {
+            other.GetComponent<BaddyHealth>().Hit();
         }
+
+        Destroy(this.gameObject);
     }
 }

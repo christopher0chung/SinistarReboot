@@ -11,16 +11,7 @@ public class AsteroidScript : MonoBehaviour, IMappable {
     {
         SpawnIcon();
         myCrystal = (GameObject)Resources.Load("Crystal");
-    }
-
-    void onEnable()
-    {
-        SpawnIcon();
-    }
-
-    void onDisable()
-    {
-        DeleteIcon();
+        gameObject.tag = "Asteroid";
     }
 
     public void SpawnIcon()
@@ -36,11 +27,11 @@ public class AsteroidScript : MonoBehaviour, IMappable {
     public void MakeACrystal (Vector3 to)
     {
         health--;
-        Debug.Log("hit");
+        //Debug.Log("hit");
         int maybe = Random.Range(0, 30);
         if (maybe == 0)
         {
-            Debug.Log("Make a crystal");
+            //Debug.Log("Make a crystal");
             Vector3 from = transform.position;
             GameObject theCrystal = (GameObject) Instantiate(myCrystal, to, Quaternion.identity);
             theCrystal.GetComponent<CrystalBehavior>().WhereToGo(from, to);
@@ -48,6 +39,7 @@ public class AsteroidScript : MonoBehaviour, IMappable {
         if (health <= 0)
         {
             Instantiate(Resources.Load("AsteroidExplosion"), transform.position, Quaternion.identity);
+            DeleteIcon();
             Destroy(this.gameObject);
         }
     }
