@@ -13,7 +13,7 @@ public class AsteroidSpawn : MonoBehaviour {
 	
         for (int i = 0; i < howMany; i++)
         {
-            Instantiate(spawnObj, new Vector3(Random.Range(-xRange / 2, xRange / 2), 0, Random.Range(-zRange / 2, zRange / 2)), Quaternion.identity, transform);
+            Instantiate(spawnObj, new Vector3(Random.Range(-xRange / 2, xRange / 2), 0, Random.Range(-zRange / 2, zRange / 2)), Quaternion.Euler(Random.Range(0, 359), Random.Range(0, 359), Random.Range(0, 359)), transform);
         }
 
 	}

@@ -46,6 +46,9 @@ public class AsteroidScript : MonoBehaviour, IMappable {
             theCrystal.GetComponent<CrystalBehavior>().WhereToGo(from, to);
         }
         if (health <= 0)
+        {
+            Instantiate(Resources.Load("AsteroidExplosion"), transform.position, Quaternion.identity);
             Destroy(this.gameObject);
+        }
     }
 }

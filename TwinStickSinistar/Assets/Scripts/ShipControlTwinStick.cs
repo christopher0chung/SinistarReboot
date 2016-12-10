@@ -114,6 +114,7 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
                     for (int i = 0; i < myPS.Length; i++)
                     {
                         myPS[i].Play();
+                        thrusterLight.enabled = true;
                     }
                 }
                 else
@@ -121,17 +122,21 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
                     for (int i = 0; i < myPS.Length; i++)
                     {
                         myPS[i].Stop();
+                        thrusterLight.enabled = false;
                     }
                 }
                 thrusterOn = value;
             }
         }
     }
+    private Light thrusterLight;
 
-
+    private Transform speedInd;
+    private SpriteRenderer shootInd;
 
 	// Use this for initialization
 	void Start () {
+        thrusterLight = transform.Find("Thruster").Find("ThrusterLight").GetComponent<Light>();
         myPosition = transform;
         myGuns = transform.Find("ShipShoot");
         myHeat = GameObject.Find("Heat").GetComponent<Text>();
@@ -144,6 +149,8 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
             myPS[i] = transform.Find("Thruster").GetChild(i).GetComponent<ParticleSystem>();
         }
         THRUSTERON = false;
+        speedInd = transform.Find("Move Arrows");
+        shootInd = transform.Find("ShipShoot").Find("ShootArrows").GetComponent<SpriteRenderer>();
 	}
 
     void Update()
@@ -176,16 +183,19 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
         if (OVERHEAT)
         {
             myHeatBar.GetComponent<SpriteRenderer>().color = new Color(1, .5f, .5f, .5f);
+            shootInd.color = new Color(1, .5f, .5f, .25f);
         }
         else
         {
             myHeatBar.GetComponent<SpriteRenderer>().color = Color.Lerp(new Color(.5f, .5f, 1, .5f), new Color(1, .5f, .5f, .5f), (heat -  50) / 50);
+            shootInd.color = Color.Lerp(new Color(.5f, .5f, 1, .25f), new Color(1, .5f, .5f, .25f), (heat - 50) / 50);
         }
     }
 	
     void FixedUpdate()
     {
         momentumApplied = Vector3.Lerp(momentumApplied, momentumContributed, .03f);
+        speedInd.localScale = new Vector3((Vector3.Magnitude(momentumApplied) / 5) * 2 + 1, 1, 1);
         myLPB.LookPtVal(momentumApplied * 20);
         myPosition.position += momentumApplied;
     }
@@ -213,7 +223,7 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
         {
             holdAng = (Mathf.Atan2(-upDown, leftRight) * Mathf.Rad2Deg);
         }
-        if (Mathf.Abs(Mathf.Sqrt(upDown * upDown + leftRight * leftRight)) > .25f && !OVERHEAT)
+        if (Mathf.Abs(Mathf.Sqrt(upDown * upDown + leftRight * leftRight)) > .85f && !OVERHEAT)
         {
             myGuns.rotation = Quaternion.Euler(0, holdAng, 0);
             SHOOTING = true;
