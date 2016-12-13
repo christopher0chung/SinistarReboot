@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Radar : MonoBehaviour {
+public class RadarMiner : MonoBehaviour, IRadar {
 
-    private MinerAction myMA;
+    private IBaddyBehavior myMA;
     private GameObject NearestCrystal;
     private GameObject NearestAsteroid;
     public float radarRange;
@@ -15,10 +15,10 @@ public class Radar : MonoBehaviour {
     // Use this for initialization
     void Start () {
         InvokeRepeating("LookAround", 0, 2);
-        myMA = GetComponent<MinerAction>();
+        myMA = GetComponent<IBaddyBehavior>();
 	}
 
-    private void LookAround ()
+    public void LookAround ()
     {
         rangeAst = 200;
         rangeCry = 200;
@@ -46,15 +46,15 @@ public class Radar : MonoBehaviour {
         }
         if (NearestCrystal != null)
         {
-            setOOC(NearestCrystal);
+            SetOOC(NearestCrystal);
         }
         else
         {
-            setOOC(NearestAsteroid);
+            SetOOC(NearestAsteroid);
         }
     }
 
-    void setOOC (GameObject OOC)
+    public void SetOOC (GameObject OOC)
     {
         myMA.SetTgt(OOC);
     }

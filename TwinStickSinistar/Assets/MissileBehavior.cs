@@ -2,34 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinerAction : MonoBehaviour, IBaddyBehavior, IMappable {
+public class MissileBehavior : MonoBehaviour, IBaddyBehavior, IMappable {
 
     private Rigidbody myRB;
-    public GameObject bullet;
 
     public GameObject target;
     private Vector3 heading;
     private float lookDir;
 
-    public float maxRange;
-    public float minRange;
     public float speedBase;
-    public float speedBoost;
 
     private Vector3 momentumApplied;
     private Vector3 momentumContributed;
 
-    private bool itsACrystal;
     private GameObject myIcon;
 
     private IRadar myRadar;
 
 
-    void Start ()
+    void Start()
     {
         myRB = GetComponent<Rigidbody>();
         gameObject.tag = "Mob";
-        InvokeRepeating("FireAtTgt", Random.Range(4.0f, 10f), 1.2f);
         SpawnIcon();
         myRadar = GetComponent<IRadar>();
     }
@@ -66,16 +60,12 @@ public class MinerAction : MonoBehaviour, IBaddyBehavior, IMappable {
     {
         if (tgt != null)
         {
-            if (tgt.gameObject.tag == "Crystal")
+            if (tgt.gameObject.tag == "Player")
             {
-                CalcHeadingToCrystal();
-                itsACrystal = true;
+                Vector3 bearing = Vector3.Normalize(tgt.transform.position - transform.position);
+                heading = bearing;
             }
-            else if (tgt.gameObject.tag == "Asteroid")
-            {
-                CalcHeadingToAsteroid();
-                itsACrystal = false;
-            }
+
             Vector3 delta = tgt.transform.position - transform.position;
             lookDir = Mathf.Lerp(lookDir, (Mathf.Atan2(-delta.z, delta.x) * Mathf.Rad2Deg), .12f);
             transform.rotation = Quaternion.Euler(0, lookDir, 0);
@@ -87,43 +77,23 @@ public class MinerAction : MonoBehaviour, IBaddyBehavior, IMappable {
     {
         if (target != null)
         {
-            if (itsACrystal)
-                momentumContributed = heading * (speedBase + speedBoost);
-            else
-                momentumContributed = heading * (speedBase);
+            momentumContributed = heading * (speedBase);
         }
     }
 
     //Set based on RadarMiner return
     public void FireAtTgt()
     {
-        if (!itsACrystal)
-            Instantiate(bullet, transform.position + transform.right * 7, transform.rotation);
+        return;
     }
 
-    private void CalcHeadingToCrystal()
+    void OnCollisionEnter(Collision other)
     {
-        if (target != null)
+        if (other.gameObject.tag == "Player")
         {
-            Vector3 bearing = Vector3.Normalize(target.transform.position - transform.position);
-            heading = bearing;
+            DeleteIcon();
+            Instantiate(Resources.Load("AsteroidExplosion"), transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
         }
     }
-
-    private void CalcHeadingToAsteroid ()
-    {
-        if (target != null)
-        {
-            float rangeToTgt = Vector3.Distance(target.transform.position, transform.position);
-            Vector3 bearing = Vector3.Normalize(target.transform.position - transform.position);
-
-            float headingSlider = 1 - ((rangeToTgt - minRange) / (maxRange - minRange));
-            headingSlider = Mathf.Clamp(headingSlider, 0, 0.7f);
-
-            heading = Vector3.Lerp(bearing, Vector3.Cross(bearing, Vector3.up), headingSlider);
-            Debug.DrawLine(transform.position, transform.position + heading * 20);
-        }
-    }
-
-   
 }
