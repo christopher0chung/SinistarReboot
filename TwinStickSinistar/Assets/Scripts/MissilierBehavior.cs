@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissileBehavior : MonoBehaviour, IBaddyBehavior, IMappable {
+public class MissilierBehavior : MonoBehaviour, IBaddyBehavior, IMappable{
 
     private Rigidbody myRB;
 
@@ -11,6 +11,9 @@ public class MissileBehavior : MonoBehaviour, IBaddyBehavior, IMappable {
     private float lookDir;
 
     public float speedBase;
+    public float speedBoost;
+
+    public float fireRange;
 
     private Vector3 momentumApplied;
     private Vector3 momentumContributed;
@@ -19,6 +22,9 @@ public class MissileBehavior : MonoBehaviour, IBaddyBehavior, IMappable {
 
     private IRadar myRadar;
 
+    private float timer;
+    public float nextSpotTime;
+    public Vector3 searchLoc;
 
     void Start()
     {
@@ -26,6 +32,7 @@ public class MissileBehavior : MonoBehaviour, IBaddyBehavior, IMappable {
         gameObject.tag = "Mob";
         SpawnIcon();
         myRadar = GetComponent<IRadar>();
+        timer = 14;
     }
 
     public void SpawnIcon()
@@ -45,7 +52,14 @@ public class MissileBehavior : MonoBehaviour, IBaddyBehavior, IMappable {
         ApplyThruster();
         myRB.velocity = Vector3.zero;
         momentumApplied = Vector3.Lerp(momentumApplied, momentumContributed, .03f);
+        //Debug.Log(momentumApplied);
+
         myRB.MovePosition(transform.position + momentumApplied);
+
+        if (target != null && Vector3.Distance(transform.position, target.transform.position) <= fireRange)
+        {
+            FireAtTgt();
+        }
     }
 
     // Called by RadarMiner
@@ -70,12 +84,30 @@ public class MissileBehavior : MonoBehaviour, IBaddyBehavior, IMappable {
             lookDir = Mathf.Lerp(lookDir, (Mathf.Atan2(-delta.z, delta.x) * Mathf.Rad2Deg), .12f);
             transform.rotation = Quaternion.Euler(0, lookDir, 0);
         }
+        else
+        {
+            timer += Time.deltaTime;
+            if (timer >= nextSpotTime || Vector3.Distance(transform.position, searchLoc) <= 20)
+            {
+                timer = 0;
+                PickARandomSpot();
+                Vector3 bearing = Vector3.Normalize(searchLoc - transform.position);
+                heading = bearing;
+            }
+            Vector3 delta = searchLoc - transform.position;
+            lookDir = Mathf.Lerp(lookDir, (Mathf.Atan2(-delta.z, delta.x) * Mathf.Rad2Deg), .12f);
+            transform.rotation = Quaternion.Euler(0, lookDir, 0);
+        }
     }
 
     // Set based on RadarMiner return
     public void ApplyThruster()
     {
         if (target != null)
+        {
+            momentumContributed = heading * (speedBase + speedBoost);
+        }
+        else
         {
             momentumContributed = heading * (speedBase);
         }
@@ -84,16 +116,21 @@ public class MissileBehavior : MonoBehaviour, IBaddyBehavior, IMappable {
     //Set based on RadarMiner return
     public void FireAtTgt()
     {
-        return;
+        target = null;
+        Instantiate(Resources.Load("MissilePrefab"), transform.position, Quaternion.identity);
+        transform.position = new Vector3(Random.Range(-900, 900), 0, Random.Range(-900, 900));
     }
 
-    void OnCollisionEnter(Collision other)
+
+    private void PickARandomSpot ()
     {
-        if (other.gameObject.tag == "Player")
-        {
-            DeleteIcon();
-            Instantiate(Resources.Load("AsteroidExplosion"), transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
-        }
+        searchLoc = new Vector3(Random.Range(-800, 800), 0, Random.Range(-800, 800));
+    }
+
+    public void CleanKill()
+    {
+        DeleteIcon();
+        Instantiate(Resources.Load("AsteroidExplosion"), transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
     }
 }

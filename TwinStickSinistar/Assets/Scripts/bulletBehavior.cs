@@ -37,6 +37,10 @@ public class BulletBehavior : MonoBehaviour {
         {
             other.GetComponent<BaddyHealth>().Hit();
         }
+        if (other.gameObject.tag == "Player")
+        {
+            other.GetComponent<PlayerHealth>().LoseCrystal("one");
+        }
 
         Destroy(this.gameObject);
     }

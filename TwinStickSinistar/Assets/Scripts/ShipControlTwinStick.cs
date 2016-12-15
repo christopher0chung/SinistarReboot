@@ -79,25 +79,8 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
 
     private float lastMoveAng;
 
-    private Text countText;
-    private int count;
-    public int crystalCount
-    {
-        get
-        {
-            return count;
-        }
-        set
-        {
-            if (value != count)
-            {
-                countText.text = "Crystal Count: " + value;
-                count = value;
-                Collect.Play();
-            }
-        }
-    }
-    private AudioSource Collect;
+    
+
 
     private ParticleSystem [] myPS = new ParticleSystem [3];
     private bool thrusterOn = true;
@@ -146,7 +129,6 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
         heat = 100;
         myLPB = GetComponentInChildren<LookPointBehavior>();
         myHeatBar = GameObject.Find("HeatBar");
-        countText = GameObject.Find("CrystalCount").GetComponent<Text>();
         for (int i = 0; i < myPS.Length; i++)
         {
             myPS[i] = transform.Find("Thruster").GetChild(i).GetComponent<ParticleSystem>();
@@ -154,7 +136,6 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
         THRUSTERON = false;
         speedInd = transform.Find("Move Arrows");
         shootInd = transform.Find("ShipShoot").Find("ShootArrows").GetComponent<SpriteRenderer>();
-        Collect = GetComponent<AudioSource>();
 	}
 
     void Update()

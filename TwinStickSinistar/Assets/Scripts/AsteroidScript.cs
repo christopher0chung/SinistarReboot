@@ -38,6 +38,16 @@ public class AsteroidScript : MonoBehaviour, IMappable {
         }
         if (health <= 0)
         {
+            for (int i = 0; i < 5; i++)
+            {
+                float ang = Random.Range(0, 359);
+                Vector3 basicPos = new Vector3(Mathf.Cos(ang * Mathf.Deg2Rad), 0, Mathf.Sin(ang * Mathf.Deg2Rad));
+                Vector3 from = transform.position + basicPos * 10;
+                Vector3 dest = transform.position + basicPos * 20;
+
+                GameObject theCrystal = (GameObject)Instantiate(Resources.Load("Crystal"), from, Quaternion.identity);
+                theCrystal.GetComponent<CrystalBehavior>().WhereToGo(from, dest);
+            }
             Instantiate(Resources.Load("AsteroidExplosion"), transform.position, Quaternion.identity);
             DeleteIcon();
             Destroy(this.gameObject);

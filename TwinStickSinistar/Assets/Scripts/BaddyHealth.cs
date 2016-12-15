@@ -18,7 +18,12 @@ public class BaddyHealth : MonoBehaviour {
 
         if (health <= 0)
         {
-            if (gameObject.name == "BadMiner(Clone)")
+            if (gameObject.name == "MissilePrefab(Clone)")
+            {
+                Instantiate(Resources.Load("AsteroidExplosion"), transform.position, Quaternion.identity);
+                GetComponent<MissileBehavior>().CleanKill();
+            }
+            else if (gameObject.name == "BaddyMiner(Clone)")
             {
                 if (GameObject.Find("SinistarCounter").GetComponent<SinistarCounter>().counter >= 1)
                 {
@@ -30,12 +35,14 @@ public class BaddyHealth : MonoBehaviour {
                 transform.position = new Vector3(Random.Range(-1000, 1000), 0, Random.Range(-1000, 1000));
                 health = maxHealth;
             }
-
-            if (gameObject.name == "MissilePrefab(Clone)")
+            else
             {
                 Instantiate(Resources.Load("AsteroidExplosion"), transform.position, Quaternion.identity);
-                Destroy(this.gameObject);
+                transform.position = new Vector3(Random.Range(-1000, 1000), 0, Random.Range(-1000, 1000));
+                health = maxHealth;
             }
+
+
         }
         
     }

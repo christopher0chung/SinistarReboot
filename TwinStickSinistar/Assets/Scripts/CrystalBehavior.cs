@@ -25,7 +25,7 @@ public class CrystalBehavior : MonoBehaviour {
         //Debug.Log(other.gameObject.name);
         if (other.gameObject.name == "Ship")
         {
-            other.GetComponent<ShipControlTwinStick>().crystalCount++;
+            other.GetComponent<PlayerHealth>().crystalCount++;
             Destroy(this.gameObject);
         }
         if (other.gameObject.tag == "Mob")
