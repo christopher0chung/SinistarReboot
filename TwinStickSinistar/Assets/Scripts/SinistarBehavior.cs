@@ -80,7 +80,7 @@ public class SinistarBehavior : MonoBehaviour, IBaddyBehavior, IMappable
             if (tgt.gameObject.tag == "Player")
             {
                 range = Vector3.Distance(transform.position, tgt.transform.position);
-                moveRange = range + 100;
+                moveRange = range + 50;
                 dir = Vector3.Normalize(tgt.transform.position - transform.position);
                 nextDest = transform.position + dir * moveRange;
                 //Debug.Log(range + " " + moveRange);

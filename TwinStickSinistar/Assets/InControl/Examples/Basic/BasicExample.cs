@@ -47,6 +47,7 @@ namespace BasicExample
 
                 myIO.LeftStick(inputDevice.LeftStickY, inputDevice.LeftStickX);
                 myIO.RightStick(inputDevice.RightStickY, inputDevice.RightStickX);
+                myIO.RightTrigger(inputDevice.RightTrigger.WasPressed);
 
                 //Debug.Log(inputDevice.LeftStickY * 1.0f + " " + inputDevice.LeftStickX * 1.0f);
             }

@@ -27,7 +27,7 @@ public class BaddyHealth : MonoBehaviour {
         }
         else
         {
-            Debug.Log(gameObject.name);
+            //Debug.Log(gameObject.name);
 
             if (armor <= 0)
                 health--;

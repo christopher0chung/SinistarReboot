@@ -26,14 +26,15 @@ public class SiniHunterBehavior : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
+        //Debug.Log(other.gameObject.name);
         if (other.gameObject.tag == "Mob")
         {
             for (int i = 0; i < 20; i++)
             {
                 other.GetComponent<BaddyHealth>().Hit();
             }
-            Destroy(this.gameObject);
         }
+        Instantiate(Resources.Load("AsteroidExplosion"), transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
     }
 }

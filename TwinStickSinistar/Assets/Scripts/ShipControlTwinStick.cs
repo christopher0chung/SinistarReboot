@@ -168,37 +168,37 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
             OVERHEAT = false;
         }
 
-        //Temp Movement Code
-        float UD;
-        float LR;
-        if (Input.GetKey(KeyCode.W))
-            UD = 1;
-        else if (Input.GetKey(KeyCode.S))
-            UD = -1;
-        else UD = 0;
+        ////Temp Movement Code
+        //float UD;
+        //float LR;
+        //if (Input.GetKey(KeyCode.W))
+        //    UD = 1;
+        //else if (Input.GetKey(KeyCode.S))
+        //    UD = -1;
+        //else UD = 0;
 
-        if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-            LR = -1;
-        else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
-            LR = 1;
-        else LR = 0;
-        LeftStick(UD, LR);
+        //if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        //    LR = -1;
+        //else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
+        //    LR = 1;
+        //else LR = 0;
+        //LeftStick(UD, LR);
 
-        //Temp Movement Code
-        float rUD;
-        float rLR;
-        if (Input.GetKey(KeyCode.I))
-            rUD = 1;
-        else if (Input.GetKey(KeyCode.K))
-            rUD = -1;
-        else rUD = 0;
+        ////Temp Movement Code
+        //float rUD;
+        //float rLR;
+        //if (Input.GetKey(KeyCode.I))
+        //    rUD = 1;
+        //else if (Input.GetKey(KeyCode.K))
+        //    rUD = -1;
+        //else rUD = 0;
 
-        if (Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.L))
-            rLR = -1;
-        else if (Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J))
-            rLR = 1;
-        else rLR = 0;
-        RightStick(rUD, rLR);
+        //if (Input.GetKey(KeyCode.J) && !Input.GetKey(KeyCode.L))
+        //    rLR = -1;
+        //else if (Input.GetKey(KeyCode.L) && !Input.GetKey(KeyCode.J))
+        //    rLR = 1;
+        //else rLR = 0;
+        //RightStick(rUD, rLR);
 
         heat = Mathf.MoveTowards(heat, 0, Time.deltaTime * (10 + 20.0f * (1 - (heat/100))));
         myHeat.text = ((int)heat).ToString();
@@ -285,7 +285,7 @@ public class ShipControlTwinStick : MonoBehaviour, IControllable {
     {
         if (GetComponent<PlayerHealth>().crystalCount > 0)
         {
-            GameObject mySH = (GameObject)Instantiate(Resources.Load("SiniHunter"), myGuns.position + myGuns.right * 7, myGuns.rotation);
+            GameObject mySH = (GameObject)Instantiate(Resources.Load("SiniHunter"), myGuns.position + myGuns.right * 17, myGuns.rotation);
             GetComponent<PlayerHealth>().crystalCount--;
         }
     }
