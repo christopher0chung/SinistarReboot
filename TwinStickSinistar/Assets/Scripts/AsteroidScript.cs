@@ -6,12 +6,15 @@ public class AsteroidScript : MonoBehaviour, IMappable {
     private GameObject myIcon;
     private GameObject myCrystal;
     private int health = 200;
+    private ParticleSystem myDust;
+
 
     void Start()
     {
         SpawnIcon();
         myCrystal = (GameObject)Resources.Load("Crystal");
         gameObject.tag = "Asteroid";
+        myDust = GetComponentInChildren<ParticleSystem>();
     }
 
     public void SpawnIcon()
@@ -24,10 +27,20 @@ public class AsteroidScript : MonoBehaviour, IMappable {
         Destroy(myIcon);
     }
 
+    private void PuffOfDust(Vector3 where)
+    {
+        myDust.transform.position = where;
+        myDust.Emit(5);
+    }
+
     public void MakeACrystal (Vector3 to)
     {
         health--;
-        //Debug.Log("hit");
+        float prescalar = health;
+        transform.localScale = Vector3.one * Mathf.Lerp(10, 30, prescalar / 200);
+
+        PuffOfDust(to);
+
         int maybe = Random.Range(0, 30);
         if (maybe == 0)
         {

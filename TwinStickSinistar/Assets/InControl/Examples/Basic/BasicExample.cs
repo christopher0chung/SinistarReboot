@@ -8,14 +8,16 @@ namespace BasicExample
 	{
 
         public IControllable myIO;
+        private bool notTheFirstTime;
 
         void Awake()
         {
             DontDestroyOnLoad(this.gameObject);
             SceneManager.sceneLoaded += MyOnLoadLevel;
+            GetComponent<MeshRenderer>().enabled = false;
         }
 
-		void Update()
+        void Update()
 		{
             if (myIO == null)
             {
@@ -57,11 +59,14 @@ namespace BasicExample
                 if (GameObject.Find("Ship") != null)
                 {
                     myIO = GameObject.Find("Ship").GetComponent<IControllable>();
-                    GetComponent<MeshRenderer>().enabled = false;
                 }
             }
+            if (scene.buildIndex == 0 && notTheFirstTime)
+            {
+                Destroy(this.gameObject);
+            }
+            notTheFirstTime = true;
         }
-
-	}
+    }
 }
 
