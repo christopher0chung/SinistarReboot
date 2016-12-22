@@ -54,6 +54,7 @@ public class GameControlManager : MonoBehaviour {
         if(GameObject.Find("SinistarCounter").GetComponent<SinistarCounter>().counter >= 50 && !enableSwitch)
         {
             SSAlive = true;
+            GameObject.Find("LookPoint").GetComponent<LookPointBehavior>().offset += 50;
             mySB.enabled = true;
             enableSwitch = true;
             for (int i = 0; i < myA.Length; i++)
